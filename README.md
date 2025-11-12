@@ -88,9 +88,9 @@ sequenceDiagram
 
 ### DIY Exercise: Temperature Converter
 Create a `Temperature` class that:
-- Stores temperature in Celsius (private)
-- Provides getter methods for both Celsius and Fahrenheit
-- Provides a setter method that accepts Celsius values
+- Stores a temperature in a private double instance variable named `celsius`
+- Provides a getter methods for `celsius`
+- Provides a setter method that accepts celsius values
 
 ## 3. Data Validation
 
