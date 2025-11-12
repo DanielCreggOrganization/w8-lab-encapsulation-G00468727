@@ -95,18 +95,28 @@ Create a `Temperature` class that:
 ## 3. Data Validation
 
 ### Learning Objective
-Learn how to validate data in setter methods to maintain data integrity and implement reusable validation using helper methods.
+Understand how to validate data both in setter methods and constructors, and how to reuse validation logic effectively with helper methods.
 
 ### Explanation
-Data validation is crucial for maintaining the integrity and reliability of our objects' state. By validating input before allowing changes to our private fields, we can prevent invalid states and ensure our objects behave correctly. Proper validation in setters helps catch errors early and provides clear feedback about what went wrong. 
+Validation ensures that the data inside an object remains correct and meaningful. When encapsulating data, validation can occur in different stages of an object's lifecycle:
 
-### Example 1: Basic Validation
+ - **Setter** validation ensures only valid data is stored when fields are modified after object creation.
+ - **Constructor** validation ensures that objects are created in a valid state from the beginning.
+
+### Example 1: Validation logic in a construcor and setter. Duplication of code. 
 ```java
 public class Student {
     private int age;
     
+    public Student(int age) {
+        if (age < 16 || age > 100) {
+            System.out.println("Invalid age: must be between 16 and 100");
+            return;
+        }
+        this.age = age;
+    }
+    
     public void setAge(int age) {
-        // Only set the age if it is valid and print a helpful message when the validation fails
         if (age < 16 || age > 100) {
             System.out.println("Invalid age: must be between 16 and 100");
             return;
@@ -117,10 +127,13 @@ public class Student {
     public int getAge() {
         return age;
     }
-}
+} 
 ```
 
-### Example 2: Using Validation Helpers - To avoid duplicating validation logic between constructors and setters, we can extract common validation rules into private helper methods.
+### Example 2: Using Validation Helpers
+
+Using helper methods avoids duplication of validation logic between constructors and setters, improving maintainability and reducing bugs.  
+
 ```java
 public class Student {
     private int age;
