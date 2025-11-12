@@ -1,9 +1,10 @@
 # Java Encapsulation Lab
 
 ## Table of Contents
-1. [Data Hiding](#1-data-hiding)
-2. [Getters and Setters](#2-getters-and-setters)
-3. [Data Validation](#3-data-validation)
+1. [Access Modifiers](#0-access-modifiers)
+2. [Data Hiding](#1-data-hiding)
+3. [Getters and Setters](#2-getters-and-setters)
+4. [Data Validation](#3-data-validation)
 
 ## Lab Setup
 1. Create a package called `ie.atu.encapsulation`
@@ -11,7 +12,118 @@
 3. Create a `main` method inside this Main class
 4. Place all the below classes from the DIY sections into this package. 
 
-## 1. Data Hiding
+## 1. Access Modifiers
+
+### Learning Objective
+Understand how access modifiers control visibility of class members and see firsthand how the `public` and `private` keywords affect what you can access from outside a class.
+
+### Explanation
+Access modifiers are keywords that set the accessibility level of classes, methods, and fields. The two most common access modifiers are:
+- **public**: The member is accessible from anywhere in your program
+- **private**: The member is only accessible within the same class
+
+When you use the dot operator (`.`) on an object in VS Code, IntelliSense shows you all the members you can access. This is a powerful visual demonstration of encapsulation in action - when you make a field private, it literally disappears from the list of accessible members.
+
+### Example: The Problem with Public Fields
+```java
+public class BankAccount {
+    public double balance;  // Public - accessible from anywhere!
+    
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+}
+```
+
+### What Can Go Wrong?
+When fields are public, anyone can modify them directly, potentially breaking business rules:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount(1000.00);
+        
+        // This should NOT be allowed, but it is!
+        account.balance = -500.00;  // Negative balance!
+        account.balance = 999999.99;  // Unlimited money!
+        
+        System.out.println("Balance: " + account.balance);
+    }
+}
+```
+
+### The Solution: Private Fields
+```java
+public class BankAccount {
+    private double balance;  // Private - only accessible within this class
+    
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+    
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+    
+    public double getBalance() {
+        return balance;
+    }
+}
+```
+
+### Visual Representation
+```mermaid
+graph LR
+    A[Main Class] -->|public balance| B[Can Access Directly]
+    A -->|private balance| C[Cannot Access Directly]
+    A -->|public methods| D[Must Use Methods]
+    D -->|Controlled Access| E[private balance]
+```
+
+### DIY Exercise: Access Modifier Demonstration
+
+**Part 1: Public Field Problems**
+1. Create a `Student` class with the following **public** fields:
+   - `name` (String)
+   - `studentId` (int)
+   - `gpa` (double)
+
+2. Add a constructor that accepts all three parameters
+
+3. In your `Main` class:
+   - Create a `Student` object
+   - Type `student.` and observe the autocomplete list in VS Code
+   - Notice that all fields appear in the list
+   - Set invalid values directly:
+     ```java
+     student.studentId = -1;  // Invalid ID
+     student.gpa = 5.5;        // GPA above 4.0
+     ```
+
+**Part 2: Fixing with Private Fields**
+1. Change all fields in the `Student` class to **private**
+2. Add getter methods for all fields
+3. Add a setter for `gpa` that validates the value is between 0.0 and 4.0
+
+4. In your `Main` class:
+   - Type `student.` again and observe the autocomplete list
+   - Notice the fields are now gone from the list!
+   - Try to access `student.name` directly - you'll get a compilation error
+   - Use the getter method instead: `student.getName()`
+
+**Expected Observation:**
+When you type `student.` in VS Code:
+- **With public fields**: You see `name`, `studentId`, `gpa`, constructor, etc.
+- **With private fields**: You only see `getName()`, `getStudentId()`, `getGpa()`, `setGpa()`, etc.
+
+The private fields have "disappeared" from outside access!
+
+### Key Takeaway
+The disappearance of private members from the autocomplete list is not just a convenience feature - it's the IDE enforcing Java's encapsulation rules. If you can't see it in the list, you can't access it directly. This is encapsulation protecting your data.
+
+## 2. Data Hiding
 
 ### Learning Objective
 Learn how to hide data using private access modifiers and understand why it's important for building robust applications.
@@ -50,7 +162,7 @@ Create a `SecretMessage` class that:
 - Try and call the message field directly using the dot operator
 - Print the message to the console using the public method
 
-## 2. Getters and Setters
+## 3. Getters and Setters
 
 ### Learning Objective
 Learn how to provide controlled access to private fields using getter and setter methods.
@@ -90,7 +202,7 @@ Create a `Temperature` class that:
 - Provides a getter methods for `celsius`
 - Provides a setter method that accepts celsius values
 
-## 3. Data Validation
+## 4. Data Validation
 
 ### Learning Objective
 Understand how to validate data both in setter methods and constructors, and how to reuse validation logic effectively with helper methods.
@@ -208,9 +320,10 @@ public class Grade {
 
 ## Summary
 This lab covered the essential concepts of encapsulation in Java:
-1. Data hiding using private fields
-2. Controlled access through getters and setters
-3. Data validation for maintaining integrity
+1. Access modifiers and their effect on visibility
+2. Data hiding using private fields
+3. Controlled access through getters and setters
+4. Data validation for maintaining integrity
 
 ## Further Reading
 - Java Documentation: [Access Control](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html)
